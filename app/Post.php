@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Post extends Model
 {
@@ -13,8 +14,20 @@ class Post extends Model
     ];
 
     //user
-    public function users()
+    public function user()
     {
-        return $this->hasMany('App\User');
+        return $this->belongsTo('App\User');
+    }
+
+    //creating post
+    public function createPost($user_id, $title, $desc)
+    {
+        $posts = Post::create([
+            'user_id' => $user_id,
+            'title' => $title,
+            'description' => $desc
+        ]);
+
+        return $posts;
     }
 }

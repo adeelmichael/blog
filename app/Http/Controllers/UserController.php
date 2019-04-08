@@ -7,41 +7,43 @@ use App\User;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        //for viewing all the posts
-        $posts = User::all();
-
-        //views here as views are not generated
-    }
-
-    public function show(User $user)
+    public function index(User $user)
     {
         $this->authorize('view', $user);
-    }
-
-    public function create(User $user)
-    {
-        $this->authorize('create', $user);
+        return User::all();
     }
 
     public function store()
     {
+        $this->authorize('create', $user);
+        $this->validate($request, [
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
 
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
+
+        return response()->json(['success' => 'User Created successfully'], 200);
     }
 
-    public function edit(User $user)
+    public function update(Request $request, User $user, $id)
     {
-        $this->authorize('update', $user);
-    }
-
-    public function update()
-    {
+            $user = User::find($id);
+            $user->update($request->only(['name', 'email']));
+            return response()->json(['success' => 'User Has been updated successfully.'], 200);
 
     }
 
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
+        $user->delete();
+
+        return response()->json(null, 204);
     }
 }

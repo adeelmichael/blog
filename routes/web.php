@@ -18,7 +18,16 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
+//routes for posts
 Route::get('/posts', 'PostsController@index');
-Route::get('/posts/{id}', 'PostsController@viewPosts');
 Route::get('/posts/create', 'PostsController@create');
+Route::get('/posts/store', 'PostsController@store');
+Route::get('/posts/update', 'PostsController@update');
+Route::get('/posts/delete', 'PostsController@destroy');
+
+//users routes
+Route::get('/users', 'UserController@index');
+Route::get('/users/create', 'PostsController@create');
+Route::get('/users/store', 'PostsController@store');
+Route::get('/users/update', 'PostsController@update');
+Route::get('/users/delete', 'PostsController@destroy');

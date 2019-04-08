@@ -7,7 +7,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use App\User;
 use App\Post;
 
-class PostsPolicy
+class PostPolicy
 {
     use HandlesAuthorization;
 
@@ -20,17 +20,7 @@ class PostsPolicy
      */
     public function view(User $user, Post $posts)
     {
-        $roles = Auth::user()->roles;
-        $name = $roles[0]->slug;
-
-            if($name === 'user')
-            {
-                //echo $posts->user_id;
-                return $posts->user_id == $user->id;
-            }elseif($name === 'admin' || $name === 'manager')
-            {
-                return true;
-            }
+         return $user->id === $posts->user_id;
     }
 
     /**
@@ -41,9 +31,10 @@ class PostsPolicy
      */
     public function create(User $user, Post $posts)
     {
+        dd($posts);
         $roles = Auth::user()->roles;
         $name = $roles[0]->slug;
-        if($name == 'manager' || $name == 'admin')
+        if($name === 'manager' || $name === 'admin')
         {
             return true;
         }else{

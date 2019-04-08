@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
+use App\Post;
 
 class User extends Authenticatable
 {
@@ -46,8 +48,16 @@ class User extends Authenticatable
     }
 
     //posts
-    public function posts()
+    public function post()
     {
-        return $this->belongsTo('App\Post');
+        return $this->hasMany('App\Post');
+    }
+
+    //get role
+    public function inRole()
+    {
+        $roles = Auth::user()->roles;
+        $name = $roles[0]->slug;
+        return $name;
     }
 }
